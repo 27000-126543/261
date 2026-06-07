@@ -35,6 +35,7 @@ const Login = () => {
 
   const handleSelectUser = (user: User) => {
     setEmail(user.email);
+    setPassword('123456');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,11 +47,11 @@ const Login = () => {
       const success = login(email, selectedRole);
       if (success) {
         const roleRoutes: Record<UserRole, string> = {
-          client: '/client/dashboard',
-          lawyer: '/lawyer/dashboard',
-          partner: '/partner/dashboard',
-          arbitrator: '/arbitrator/dashboard',
-          finance: '/finance/dashboard',
+          client: '/client',
+          lawyer: '/lawyer',
+          partner: '/partner',
+          arbitrator: '/arbitrator',
+          finance: '/finance',
         };
         navigate(roleRoutes[selectedRole]);
       } else {
