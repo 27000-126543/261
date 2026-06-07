@@ -9,12 +9,18 @@ import SubmitCase from "./pages/client/SubmitCase";
 
 import LawyerDashboard from "./pages/lawyer/LawyerDashboard";
 import TimesheetPage from "./pages/lawyer/TimesheetPage";
+import SchedulePage from "./pages/lawyer/SchedulePage";
+import TaskPage from "./pages/lawyer/TaskPage";
 
 import PartnerDashboard from "./pages/partner/PartnerDashboard";
 
 import ArbitratorDashboard from "./pages/arbitrator/ArbitratorDashboard";
 
 import FinanceDashboard from "./pages/finance/FinanceDashboard";
+import MonthlyReport from "./pages/finance/MonthlyReport";
+import ClientCases from "./pages/client/ClientCases";
+import ClientBills from "./pages/client/ClientBills";
+import ClientInvoices from "./pages/client/ClientInvoices";
 
 const ProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode; allowedRoles?: string[] }) => {
   const currentUser = useAuthStore((state) => state.currentUser);
@@ -57,9 +63,9 @@ export default function App() {
         >
           <Route index element={<ClientDashboard />} />
           <Route path="submit" element={<SubmitCase />} />
-          <Route path="cases" element={<div className="p-6"><h2 className="text-xl font-bold">我的案件</h2><p className="text-gray-500 mt-2">页面开发中...</p></div>} />
-          <Route path="bills" element={<div className="p-6"><h2 className="text-xl font-bold">账单中心</h2><p className="text-gray-500 mt-2">页面开发中...</p></div>} />
-          <Route path="invoices" element={<div className="p-6"><h2 className="text-xl font-bold">发票管理</h2><p className="text-gray-500 mt-2">页面开发中...</p></div>} />
+          <Route path="cases" element={<ClientCases />} />
+          <Route path="bills" element={<ClientBills />} />
+          <Route path="invoices" element={<ClientInvoices />} />
         </Route>
         
         <Route
@@ -72,8 +78,8 @@ export default function App() {
         >
           <Route index element={<LawyerDashboard />} />
           <Route path="cases" element={<div className="p-6"><h2 className="text-xl font-bold">案件管理</h2><p className="text-gray-500 mt-2">页面开发中...</p></div>} />
-          <Route path="tasks" element={<div className="p-6"><h2 className="text-xl font-bold">任务管理</h2><p className="text-gray-500 mt-2">页面开发中...</p></div>} />
-          <Route path="schedule" element={<div className="p-6"><h2 className="text-xl font-bold">日程排期</h2><p className="text-gray-500 mt-2">页面开发中...</p></div>} />
+          <Route path="tasks" element={<TaskPage />} />
+          <Route path="schedule" element={<SchedulePage />} />
           <Route path="timesheet" element={<TimesheetPage />} />
         </Route>
         
@@ -113,7 +119,7 @@ export default function App() {
           }
         >
           <Route index element={<FinanceDashboard />} />
-          <Route path="reports" element={<div className="p-6"><h2 className="text-xl font-bold">月度报表</h2><p className="text-gray-500 mt-2">页面开发中...</p></div>} />
+          <Route path="reports" element={<MonthlyReport />} />
           <Route path="invoices" element={<div className="p-6"><h2 className="text-xl font-bold">发票管理</h2><p className="text-gray-500 mt-2">页面开发中...</p></div>} />
         </Route>
         

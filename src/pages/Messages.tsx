@@ -19,6 +19,9 @@ import {
   Filter,
   Inbox,
   Archive,
+  X,
+  Download,
+  Eye,
 } from 'lucide-react';
 
 const typeIcons: Record<MessageType, React.ReactNode> = {
@@ -59,6 +62,8 @@ const Messages = () => {
   const [filter, setFilter] = useState<'all' | 'unread' | 'read'>('all');
   const [typeFilter, setTypeFilter] = useState<MessageType | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMessage, setSelectedMessage] = useState<any>(null);
+  const [showDetail, setShowDetail] = useState(false);
 
   const myMessages = messages.filter((m) => m.userId === currentUser?.id);
 
@@ -82,6 +87,12 @@ const Messages = () => {
     if (!msg.isRead) {
       markAsRead(msg.id);
     }
+    setSelectedMessage(msg);
+    setShowDetail(true);
+  };
+
+  const handleDownloadVoucher = () => {
+    alert('正在下载凭证文件...\n\n凭证编号：' + (selectedMessage?.data?.voucherId || 'VOUCHER-' + Date.now()));
   };
 
   return (
@@ -206,6 +217,72 @@ const Messages = () => {
           </div>
         )}
       </div>
+
+      {showDetail && selectedMessage && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${typeColors[selectedMessage.type]}`}>
+                  {typeIcons[selectedMessage.type]}
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">消息详情</h2>
+                  <p className="text-sm text-gray-500 mt-0.5">{typeLabels[selectedMessage.type]}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowDetail(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{selectedMessage.title}</h3>
+                <p className="text-sm text-gray-500 mb-4">{formatDateTime(selectedMessage.createdAt)}</p>
+                <div className="p-4 bg-gray-50 rounded-xl">
+                  <p className="text-gray-700 leading-relaxed">{selectedMessage.content}</p>
+                </div>
+              </div>
+
+              {selectedMessage.data && Object.keys(selectedMessage.data).length > 0 && (
+                <div className="card p-5">
+                  <h4 className="font-semibold text-gray-900 mb-4">详细信息</h4>
+                  <div className="space-y-3">
+                    {Object.entries(selectedMessage.data).map(([key, value]) => (
+                      <div key={key} className="flex justify-between py-2 border-b border-gray-100 last:border-0">
+                        <span className="text-gray-500 capitalize">
+                          {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
+                        </span>
+                        <span className="font-medium text-gray-900">{String(value)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDownloadVoucher}
+                  className="flex-1 btn-primary flex items-center justify-center gap-2"
+                >
+                  <Download size={18} />
+                  下载凭证
+                </button>
+                <button
+                  onClick={() => setShowDetail(false)}
+                  className="flex-1 btn-secondary flex items-center justify-center gap-2"
+                >
+                  关闭
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

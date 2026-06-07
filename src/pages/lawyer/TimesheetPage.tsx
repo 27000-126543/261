@@ -59,6 +59,9 @@ const TimesheetPage = () => {
 
     const workType = workTypes.find((w) => w.value === formData.workType);
     const rate = workType?.rate || 800;
+    const fullDescription = formData.description
+      ? `${workType?.label || '其他工作'} - ${formData.description}`
+      : workType?.label || '其他工作';
 
     addTimesheet({
       caseId: formData.caseId,
@@ -68,7 +71,7 @@ const TimesheetPage = () => {
       workDate: formData.date,
       hours: formData.hours,
       rate,
-      description: formData.description,
+      description: fullDescription,
     });
 
     const caseItem = cases.find((c) => c.id === formData.caseId);
@@ -164,7 +167,6 @@ const TimesheetPage = () => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {myTimesheets.map((ts) => {
-                const workType = workTypes.find((w) => w.value === ts.workType);
                 return (
                   <tr key={ts.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{formatDate(ts.workDate)}</td>
@@ -172,7 +174,7 @@ const TimesheetPage = () => {
                       <div className="text-sm font-medium text-gray-900">{ts.caseName}</div>
                       <div className="text-xs text-gray-500">{ts.description}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{workType?.label || ts.workType}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ts.description}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ts.hours}h</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(ts.rate)}/h</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gold-600">{formatCurrency(ts.amount)}</td>
